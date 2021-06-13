@@ -29,7 +29,7 @@ exports.initWsRouting = () => {
             try {
                 jsonMessage = JSON.parse(message);
             } catch (e) {
-                console.log(e);
+                sendError(ws, "Can't read json message");
             }
 
             if (jsonMessage) routers(ws, jsonMessage);
@@ -37,6 +37,8 @@ exports.initWsRouting = () => {
 
         ws.on('close', () => {
             deleteWsClient(ws);
+            deleteWsClientName(ws);
+            if (ws.group) deleteWsFromGroup(ws);
         });
     })
 }
@@ -55,21 +57,77 @@ const deleteWsClient = (ws) => {
     delete singleton.wsClients[ws.uuid];
 }
 
-exports.addWsToGroup = (ws, group) => {
+exports.addWsToGroup = (ws, group, name) => {
     let octpousGroup = singleton.octpousGroups[group];
     if (octpousGroup == undefined) {
         singleton.octpousGroups[group] = {
             type: 'rr',
             currentWsIndex: 0,
+            nextWsNameId: 1,
             wsClients: []
         }
-        octpousGroup = singleton.octpousGroups[group];
     } 
 
+    octpousGroup = singleton.octpousGroups[group];
     octpousGroup.wsClients.push(ws);
+    ws.group = group;
+
+    let newName = name;
+    if (!name) {
+        newName = group + "_" + octpousGroup.nextWsNameId;
+        octpousGroup.nextWsNameId++;
+    }
     console.log(singleton.octpousGroups);
+    return newName;
 }
 
-exports.deleteWsFromGroup = (ws, group) => {
-
+exports.addWsClientName = (ws, name) => {
+    singleton.wsClientNames[name] = ws;
 }
+
+const deleteWsClientName = (ws) => {
+    if (ws.name) delete singleton.wsClientNames[ws.name];
+}
+
+exports.deleteWsClientName = deleteWsClientName;
+
+const deleteWsFromGroup = (ws) => {
+    let group = ws.group;
+    octpousGroup = singleton.octpousGroups[group];
+    if (!octpousGroup) return;
+
+    const index = octpousGroup.wsClients.indexOf(ws);
+    if (index > -1) {
+        octpousGroup.wsClients.splice(index, 1);
+    }
+}
+
+exports.deleteWsFromGroup = deleteWsFromGroup
+
+const sendError = (ws, error) => {
+    let errorJson = {
+        status: "fail",
+        errorMessage: error
+    }
+
+    ws.send(JSON.stringify(errorJson));
+}
+
+exports.sendError = sendError;
+
+const isWsClientNameExists = (name) => {
+    return (singleton.wsClientNames[name])? true : false;
+}
+
+exports.isWsClientNameExists = isWsClientNameExists
+
+const sendIdentity = (ws) => {
+    let jsonMessage = {
+        status: "ok",
+        identity: ws.name
+    }
+
+    ws.send(JSON.stringify(jsonMessage));
+}
+
+exports.sendIdentity = sendIdentity

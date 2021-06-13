@@ -6,10 +6,20 @@ const SystemRouter = require('./SystemRouter');
 const routers = (ws, message) => {
     if (ws.identity == null) {
         let group = message.group;
-        if (group) group.trim();
+        if (group) group = group.trim();
         if (group && group.length > 0) {
             ws.identity = "client";
-            SystemActions.addWsToGroup(ws, group);
+            if (message.name) {
+                let name = message.name.trim();
+                if (SystemActions.isWsClientNameExists(name)) {
+                    SystemActions.sendError(ws, "Client name already exists");
+                    return;
+                }
+            }
+            ws.name = SystemActions.addWsToGroup(ws, group, message.name);
+            SystemActions.addWsClientName(ws, ws.name);
+
+            SystemActions.sendIdentity(ws);
         }
     } else {
         switch (ws.identity) {
