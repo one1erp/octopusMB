@@ -1,4 +1,7 @@
-const SystemActions = rootRequire('./actions/SystemActions');
+const SystemActions = rootRequire('actions/SystemActions');
+const octopusGroups = rootRequire('libs/octopus/groups');
+const octopusMessages = rootRequire('libs/octopus/messages');
+const wsClients = rootRequire('libs/wsClients');
 
 const ClientRouter = require('./ClientRouter');
 const SystemRouter = require('./SystemRouter');
@@ -11,17 +14,24 @@ const routers = (ws, message) => {
             ws.identity = "client";
             if (message.name) {
                 let name = message.name.trim();
-                if (SystemActions.isWsClientNameExists(name)) {
+                if (wsClients.isClientNameExists(name)) {
                     SystemActions.sendError(ws, "Client name already exists");
                     return;
                 }
+
+                if (octopusGroups.isGroupNameExists(name)) {
+                    SystemActions.sendError(ws, "Group with the same name already exists");
+                    return;
+                }
             }
-            ws.name = SystemActions.addWsToGroup(ws, group, message.name);
-            SystemActions.addWsClientName(ws, ws.name);
+            ws.name = octopusGroups.addWsToGroup(ws, group, message.name);
+            wsClients.addClientName(ws, ws.name);
 
             SystemActions.sendIdentity(ws);
         }
     } else {
+        message.from = ws.name;
+        octopusMessages.addMessage(message);
         switch (ws.identity) {
             case "client":
                 ClientRouter(ws, message);
