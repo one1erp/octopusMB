@@ -9,10 +9,10 @@ const ClientRouter = (ws, message) => {
     if (name) {
         if (wsClients.isClientNameExists(name)) {
             console.log("sending to client: " + name);
-            ClientActions.sendToClient(name, data);
+            ClientActions.sendToClient(name, message);
         } else if (octopusGroups.isGroupNameExists(name)) {
             console.log("sending to group: " + name);
-            ClientActions.sendToGroup(ws, name, data);
+            ClientActions.sendToGroup(name, message);
         }
     }
 }

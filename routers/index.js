@@ -31,13 +31,13 @@ const routers = (ws, message) => {
         }
     } else {
         message.from = ws.name;
-        octopusMessages.addMessage(message);
+        let newMessage = octopusMessages.addMessage(message);
         switch (ws.identity) {
             case "client":
-                ClientRouter(ws, message);
+                ClientRouter(ws, newMessage);
                 break;
             case "system":
-                SystemRouter(ws, message);
+                SystemRouter(ws, newMessage);
                 break;
         }
     }
