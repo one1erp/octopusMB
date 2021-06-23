@@ -11,6 +11,25 @@ const addMessage = (message) => {
     return newMessage;
 }
 
+const updateStatus = (messageId, status) => {
+    let message = messages[messageId];
+    if (message) {
+        message.status = status;
+    }
+}
+
+const doesMessageExists = (messageId) => {
+    console.log("checking if message exists: " + messageId);
+    return (messages[messageId])? true : false;
+}
+
+const getMessage = (messageId) => {
+    return messages[messageId];
+}
+
 module.exports = {
-    addMessage
+    addMessage,
+    updateStatus,
+    doesMessageExists,
+    getMessage
 }

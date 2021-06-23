@@ -6,8 +6,12 @@ const wsClients = rootRequire('libs/wsClients');
 const ClientRouter = (ws, message) => {
     let name = message.to;
     let data = message.data;
-    if (name) {
-        if (wsClients.isClientNameExists(name)) {
+    let replyTo = message.replyTo;
+    if (name || replyTo) {
+        if (replyTo && octopusMessages.doesMessageExists(replyTo)) {
+            console.log("replying to messageId: " + replyTo);
+            ClientActions.replyToClient(replyTo, message);
+        } else if (wsClients.isClientNameExists(name)) {
             console.log("sending to client: " + name);
             ClientActions.sendToClient(name, message);
         } else if (octopusGroups.isGroupNameExists(name)) {
