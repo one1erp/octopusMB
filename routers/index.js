@@ -28,16 +28,18 @@ const routers = (ws, message) => {
             wsClients.addClientName(ws, ws.name);
 
             SystemActions.sendIdentity(ws);
+
+            octopusMessages.resendWaitingMessages(ClientRouter);
         }
     } else {
         message.from = ws.name;
         let newMessage = octopusMessages.addMessage(message);
         switch (ws.identity) {
             case "client":
-                ClientRouter(ws, newMessage);
+                ClientRouter(newMessage);
                 break;
             case "system":
-                SystemRouter(ws, newMessage);
+                SystemRouter(newMessage);
                 break;
         }
     }
