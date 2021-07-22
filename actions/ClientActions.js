@@ -11,7 +11,7 @@ exports.sendToGroup = (group, message) => {
         currentWsIndex++;
         if (octopusGroup.wsClients.length < currentWsIndex + 1) currentWsIndex = 0;
         octopusGroup.wsClients[currentWsIndex].send(createMessageToClient(message));
-        octopusMessages.updateStatus(message.uuid, "sent");
+        octopusMessages.updateStatus(message.uuid, octopusMessages.status.SENT);
     }
 }
 
@@ -19,18 +19,19 @@ const sendToClient = (clientName, message) => {
     let client = wsClients.getClientByName(clientName);
     if (!client) return;
     client.send(createMessageToClient(message));
-    octopusMessages.updateStatus(message.uuid, "sent");
+    octopusMessages.updateStatus(message.uuid, octopusMessages.status.SENT);
 }
 
 exports.sendToClient = sendToClient;
 
 exports.replyToClient = (replyToMessageId, message) => {
+    console.log("got to reply to");
     let originalMessage = octopusMessages.getMessage(replyToMessageId);
     if (!originalMessage) return;
     message.replyToClientMessageId = originalMessage.clientMessageId;
     message.to = originalMessage.from;
     sendToClient(message.to, message);
-
+    octopusMessages.updateStatus(originalMessage.uuid, octopusMessages.status.REPLIED);
 }
 
 const createMessageToClient = (message) => {

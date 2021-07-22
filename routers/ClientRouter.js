@@ -3,7 +3,7 @@ const octopusGroups = rootRequire('libs/octopus/groups');
 const octopusMessages = rootRequire('libs/octopus/messages');
 const wsClients = rootRequire('libs/wsClients');
 
-const ClientRouter = (ws, message) => {
+const ClientRouter = (message) => {
     let name = message.to;
     let data = message.data;
     let replyTo = message.replyTo;
@@ -17,6 +17,9 @@ const ClientRouter = (ws, message) => {
         } else if (octopusGroups.isGroupNameExists(name)) {
             console.log("sending to group: " + name);
             ClientActions.sendToGroup(name, message);
+        } else {
+            console.log("setting message: " + message.uuid + " to status waiting");
+            octopusMessages.updateStatus(message.uuid, octopusMessages.status.WAITING);
         }
     }
 }

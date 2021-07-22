@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const routers = rootRequire('./routers');
 const octopusGroups = rootRequire('./libs/octopus/groups');
 const wsClients = rootRequire('./libs/wsClients');
+const octopusMessages = rootRequire('libs/octopus/messages');
 
 exports.initLogger = () => {
 
@@ -70,3 +71,7 @@ const sendIdentity = (ws) => {
 }
 
 exports.sendIdentity = sendIdentity
+
+exports.initServices = () => {
+    setInterval(octopusMessages.clearSentMessages, 1000);
+}

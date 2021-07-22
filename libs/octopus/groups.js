@@ -33,6 +33,12 @@ const deleteWsFromGroup = (ws) => {
     if (index > -1) {
         octpousGroup.wsClients.splice(index, 1);
     }
+
+    //delete group if wsClients is empty
+    if (octpousGroup.wsClients.length == 0) {
+        console.log("deleting empty group: " + group)
+        delete groups[group];
+    }
 }
 
 const isGroupNameExists = (name) => {

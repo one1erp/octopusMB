@@ -5,6 +5,7 @@ const bootstrap = () => {
     SystemActions.initWS();
     SystemActions.initWsRouting();
     SystemActions.startWS();
+    SystemActions.initServices();
 }
 
 module.exports = bootstrap
