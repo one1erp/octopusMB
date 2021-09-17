@@ -7,10 +7,16 @@ const octopusMessages = rootRequire('libs/octopus/messages');
 exports.sendToGroup = (group, message) => {
     let octopusGroup = octopusGroups.getGroupByName(group);
     if (octopusGroup && octopusGroup.wsClients.length > 0) {
-        let currentWsIndex = octopusGroup.currentWsIndex;
-        currentWsIndex++;
-        if (octopusGroup.wsClients.length < currentWsIndex + 1) currentWsIndex = 0;
-        octopusGroup.wsClients[currentWsIndex].send(createMessageToClient(message));
+        if (message.type == "publish") {
+            for (let i=0; i<octopusGroup.wsClients.length; i++) {
+                octopusGroup.wsClients[i].send(createMessageToClient(message)); 
+            }
+        } else {
+            let currentWsIndex = octopusGroup.currentWsIndex;
+            currentWsIndex++;
+            if (octopusGroup.wsClients.length < currentWsIndex + 1) currentWsIndex = 0;
+            octopusGroup.wsClients[currentWsIndex].send(createMessageToClient(message));
+        }
         octopusMessages.updateStatus(message.uuid, octopusMessages.status.SENT);
     }
 }

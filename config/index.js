@@ -7,5 +7,9 @@ module.exports = {
 	system: {
 		port: env(process.env.PORT, "8899")
 	},
-	errors: errors
+	errors: errors,
+	messages: {
+		dataDir: env(process.env.DATA_DIR, "data\\"),
+		messagesPerFile: env(process.env.MESSAGES_PER_FILE, 50000)
+	}
 }
