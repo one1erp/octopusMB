@@ -1,4 +1,3 @@
-var singleton = rootRequire('./singleton');
 const wsClients = rootRequire('libs/wsClients');
 const octopusGroups = rootRequire('libs/octopus/groups');
 const octopusMessages = rootRequire('libs/octopus/messages');

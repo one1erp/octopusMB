@@ -1,7 +1,7 @@
 var rootRequire = require('./libs/rootRequire')();
+const logger = require('./config/logger');
 
 var bootstrap = require('./bootstrap');
-var singleton = require('./singleton');
-const config = require('./config');
 
+logger.info("service started");
 bootstrap();
