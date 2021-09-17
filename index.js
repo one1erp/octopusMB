@@ -1,7 +1,6 @@
-var rootRequire = require('./libs/rootRequire')();
-const logger = require('./config/logger');
+import logger from './config/logger.js';
 
-var bootstrap = require('./bootstrap');
+import bootstrap from './bootstrap/index.js';
 
 logger.info("service started");
 bootstrap();

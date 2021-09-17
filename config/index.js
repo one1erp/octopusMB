@@ -1,13 +1,12 @@
-const env = require('dotenv');
-rootRequire('libs/env');
-var errors = require('./errors');
-const dotenvParseVariables = require('dotenv-parse-variables');
+import env from 'dotenv';
+import errors from './errors.js';
+import dotenvParseVariables from 'dotenv-parse-variables';
 
 let baseEnv = env.config();
 let parsedEnv = dotenvParseVariables(baseEnv.parsed);
 
 
-module.exports = {
+export default {
 	system: {
 		port: parsedEnv.PORT,
 	},

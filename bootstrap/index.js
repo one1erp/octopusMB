@@ -1,11 +1,10 @@
-const SystemActions = rootRequire('./actions/SystemActions');
+import SystemActions from '../actions/SystemActions.js';
 
 const bootstrap = () => {
-    SystemActions.initLogger();
     SystemActions.initWS();
     SystemActions.initWsRouting();
     SystemActions.startWS();
     SystemActions.initServices();
 }
 
-module.exports = bootstrap
+export default bootstrap

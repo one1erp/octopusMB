@@ -1,5 +1,5 @@
-const nodeLogger = require('node-logger');
-const config = rootRequire('config');
+import nodeLogger from 'node-logger';
+import config  from './index.js';
 
 const logger = nodeLogger({
     logFile: config.log.file,
@@ -9,4 +9,4 @@ const logger = nodeLogger({
     maxFiles: config.log.maxFiles
 });
 
-module.exports = logger;
+export default logger

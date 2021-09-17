@@ -27,8 +27,7 @@ const isClientNameExists = (name) => {
 const getClientByName = (name) => {
     return clientsNames[name];
 }
-
-module.exports = {
+export default {
     addClient,
     deleteClient,
     addClientName,

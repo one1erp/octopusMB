@@ -1,18 +1,14 @@
-const http = require('http');
-const ws = require('ws');
-const config = rootRequire('./config');
-var singleton = rootRequire('./singleton');
-const { v4: uuidv4 } = require('uuid');
-const routers = rootRequire('./routers');
-const octopusGroups = rootRequire('./libs/octopus/groups');
-const wsClients = rootRequire('./libs/wsClients');
-const octopusMessages = rootRequire('libs/octopus/messages');
+import http from 'http';
+import ws from 'ws';
+import config from '../config/index.js';
+import singleton from '../singleton/index.js';
+import { v4 as uuidv4 }from 'uuid';
+import routers from '../routers/index.js';
+import octopusGroups from '../libs/octopus/groups.js';
+import wsClients from '../libs/wsClients.js';
+import octopusMessages from '../libs/octopus/messages.js';
 
-exports.initLogger = () => {
-
-}
-
-exports.initWS = () => {
+const initWS = () => {
     const httpServer = http.createServer({
         //cert: fs.readFileSync('/path/to/cert.pem'),
         //key: fs.readFileSync('/path/to/key.pem')
@@ -22,7 +18,7 @@ exports.initWS = () => {
     singleton.wsServer = wss;
 }
 
-exports.initWsRouting = () => {
+const initWsRouting = () => {
     singleton.wsServer.on("connection", (ws) => {
         ws.identity = null;
         ws.uuid = uuidv4();
@@ -46,7 +42,7 @@ exports.initWsRouting = () => {
     })
 }
 
-exports.startWS = () => {
+const startWS = () => {
     singleton.httpServer.listen(config.system.port, () => {console.log("listening to: " + config.system.port)});
 }
 
@@ -59,8 +55,6 @@ const sendError = (ws, error) => {
     ws.send(JSON.stringify(errorJson));
 }
 
-exports.sendError = sendError;
-
 const sendIdentity = (ws) => {
     let jsonMessage = {
         status: "ok",
@@ -70,8 +64,15 @@ const sendIdentity = (ws) => {
     ws.send(JSON.stringify(jsonMessage));
 }
 
-exports.sendIdentity = sendIdentity
-
-exports.initServices = () => {
+const initServices = () => {
     setInterval(octopusMessages.clearSentMessages, 1000);
+}
+
+export default {
+    initWS,
+    initWsRouting,
+    startWS,
+    sendError,
+    sendIdentity,
+    initServices
 }

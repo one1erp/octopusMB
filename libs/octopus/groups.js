@@ -1,8 +1,8 @@
 let groups = {};
 
 const addWsToGroup = (ws, group, name) => {
-    let octpousGroup = groups[group];
-    if (octpousGroup == undefined) {
+    let octopusGroup = groups[group];
+    if (octopusGroup == undefined) {
         groups[group] = {
             type: 'rr',
             currentWsIndex: 0,
@@ -11,14 +11,14 @@ const addWsToGroup = (ws, group, name) => {
         }
     } 
 
-    octpousGroup = groups[group];
-    octpousGroup.wsClients.push(ws);
+    octopusGroup = groups[group];
+    octopusGroup.wsClients.push(ws);
     ws.group = group;
 
     let newName = name;
     if (!name) {
-        newName = group + "_" + octpousGroup.nextWsNameId;
-        octpousGroup.nextWsNameId++;
+        newName = group + "_" + octopusGroup.nextWsNameId;
+        octopusGroup.nextWsNameId++;
     }
     console.log(groups);
     return newName;
@@ -26,16 +26,16 @@ const addWsToGroup = (ws, group, name) => {
 
 const deleteWsFromGroup = (ws) => {
     let group = ws.group;
-    octpousGroup = groups[group];
-    if (!octpousGroup) return;
+    let octopusGroup = groups[group];
+    if (!octopusGroup) return;
 
-    const index = octpousGroup.wsClients.indexOf(ws);
+    const index = octopusGroup.wsClients.indexOf(ws);
     if (index > -1) {
-        octpousGroup.wsClients.splice(index, 1);
+        octopusGroup.wsClients.splice(index, 1);
     }
 
     //delete group if wsClients is empty
-    if (octpousGroup.wsClients.length == 0) {
+    if (octopusGroup.wsClients.length == 0) {
         console.log("deleting empty group: " + group)
         delete groups[group];
     }
@@ -49,7 +49,7 @@ const getGroupByName = (name) => {
     return groups[name];
 }
 
-module.exports = {
+export default {
     addWsToGroup,
     deleteWsFromGroup,
     isGroupNameExists,

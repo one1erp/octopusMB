@@ -1,9 +1,9 @@
-const wsClients = rootRequire('libs/wsClients');
-const octopusGroups = rootRequire('libs/octopus/groups');
-const octopusMessages = rootRequire('libs/octopus/messages');
+import wsClients from '../libs/wsClients.js';
+import octopusGroups from '../libs/octopus/groups.js';
+import octopusMessages from '../libs/octopus/messages.js';
 
 
-exports.sendToGroup = (group, message) => {
+const sendToGroup = (group, message) => {
     let octopusGroup = octopusGroups.getGroupByName(group);
     if (octopusGroup && octopusGroup.wsClients.length > 0) {
         if (message.type == "publish") {
@@ -27,9 +27,7 @@ const sendToClient = (clientName, message) => {
     octopusMessages.updateStatus(message.uuid, octopusMessages.status.SENT);
 }
 
-exports.sendToClient = sendToClient;
-
-exports.replyToClient = (replyToMessageId, message) => {
+const replyToClient = (replyToMessageId, message) => {
     console.log("got to reply to");
     let originalMessage = octopusMessages.getMessage(replyToMessageId);
     if (!originalMessage) return;
@@ -51,4 +49,10 @@ const createMessageToClient = (message) => {
     }
 
     return JSON.stringify(newMessage);
+}
+
+export default {
+    sendToGroup,
+    sendToClient,
+    replyToClient
 }

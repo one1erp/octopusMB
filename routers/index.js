@@ -1,10 +1,10 @@
-const SystemActions = rootRequire('actions/SystemActions');
-const octopusGroups = rootRequire('libs/octopus/groups');
-const octopusMessages = rootRequire('libs/octopus/messages');
-const wsClients = rootRequire('libs/wsClients');
+import SystemActions from '../actions/SystemActions.js';
+import octopusGroups from '../libs/octopus/groups.js';
+import octopusMessages from '../libs/octopus/messages.js';
+import wsClients from '../libs/wsClients.js';
 
-const ClientRouter = require('./ClientRouter');
-const SystemRouter = require('./SystemRouter');
+import ClientRouter from './ClientRouter.js';
+import SystemRouter from './SystemRouter.js';
 
 const routers = (ws, message) => {
     if (ws.identity == null) {
@@ -45,4 +45,4 @@ const routers = (ws, message) => {
     }
 }
 
-module.exports = routers
+export default routers

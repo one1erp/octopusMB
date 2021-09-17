@@ -1,4 +1,4 @@
-const {v4 : uuidv4} = require('uuid');
+import {v4 as uuidv4} from 'uuid';
 
 let messages = {}
 
@@ -59,7 +59,7 @@ const resendWaitingMessages = (router) => {
     }
 }
 
-module.exports = {
+export default {
     addMessage,
     updateStatus,
     doesMessageExists,

@@ -1,7 +1,7 @@
-const ClientActions = rootRequire('./actions/ClientActions');
-const octopusGroups = rootRequire('libs/octopus/groups');
-const octopusMessages = rootRequire('libs/octopus/messages');
-const wsClients = rootRequire('libs/wsClients');
+import ClientActions from '../actions/ClientActions.js';
+import octopusGroups from '../libs/octopus/groups.js';
+import octopusMessages from '../libs/octopus/messages.js';
+import wsClients from '../libs/wsClients.js';
 
 const ClientRouter = (message) => {
     let name = message.to;
@@ -24,4 +24,4 @@ const ClientRouter = (message) => {
     }
 }
 
-module.exports = ClientRouter
+export default ClientRouter
