@@ -1,14 +1,16 @@
+import logger from '../config/logger.js';
+
 let clients = {};
 let clientsNames = {};
 
 const addClient = (ws) => {
-    console.log("adding ws:" + ws.uuid);
+    logger.debug("adding ws:" + ws.uuid);
     clients[ws.uuid] = ws;
 }
 
 
 const deleteClient = (ws) => {
-    console.log("removing ws:" + ws.uuid);
+    logger.debug("removing ws:" + ws.uuid);
     delete clients[ws.uuid];
 }
 

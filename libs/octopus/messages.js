@@ -1,4 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
+import logger from '../../config/logger.js';
 
 let messages = {}
 
@@ -14,12 +15,12 @@ const addMessage = (message) => {
     newMessage.uuid = uuidv4();
     newMessage.status = status.RECEIVED;
     messages[newMessage.uuid] = newMessage
-    console.log("added message:", newMessage);
+    logger.debug("added message:", newMessage);
     return newMessage;
 }
 
 const updateStatus = (messageId, status) => {
-    console.log("updating message status:", messageId);
+    logger.debug("updating message status:", messageId);
     let message = messages[messageId];
     if (message) {
         message.status = status;
@@ -27,7 +28,7 @@ const updateStatus = (messageId, status) => {
 }
 
 const doesMessageExists = (messageId) => {
-    console.log("checking if message exists: " + messageId);
+    logger.debug("checking if message exists: " + messageId);
     return (messages[messageId])? true : false;
 }
 
@@ -40,7 +41,7 @@ const clearSentMessages = () => {
         let message = messages[messageId];
         if (message) {
             if ((message.type != "request" && message.status == status.SENT) || (message.type == "request" && message.status == status.REPLIED)) {
-                console.log("deleting sent message:" + messageId);
+                logger.debug("deleting sent message:" + messageId);
                 delete messages[messageId];
             }
 
@@ -49,11 +50,11 @@ const clearSentMessages = () => {
 }
 
 const resendWaitingMessages = (router) => {
-    console.log("resending waiting messages");
+    logger.debug("resending waiting messages");
     for (const messageId in messages) {
         let message = messages[messageId];
         if (message && message.status == status.WAITING) {
-            console.log("resending message: " + message.uuid);
+            logger.debug("resending message: " + message.uuid);
             router(message);
         }
     }

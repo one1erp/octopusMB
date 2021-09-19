@@ -1,3 +1,5 @@
+import logger from '../../config/logger.js';
+
 let groups = {};
 
 const addWsToGroup = (ws, group, name) => {
@@ -20,7 +22,6 @@ const addWsToGroup = (ws, group, name) => {
         newName = group + "_" + octopusGroup.nextWsNameId;
         octopusGroup.nextWsNameId++;
     }
-    console.log(groups);
     return newName;
 }
 
@@ -36,7 +37,7 @@ const deleteWsFromGroup = (ws) => {
 
     //delete group if wsClients is empty
     if (octopusGroup.wsClients.length == 0) {
-        console.log("deleting empty group: " + group)
+        logger.debug("deleting empty group: " + group)
         delete groups[group];
     }
 }
@@ -55,4 +56,3 @@ export default {
     isGroupNameExists,
     getGroupByName
 }
-

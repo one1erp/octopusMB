@@ -28,7 +28,6 @@ const sendToClient = (clientName, message) => {
 }
 
 const replyToClient = (replyToMessageId, message) => {
-    console.log("got to reply to");
     let originalMessage = octopusMessages.getMessage(replyToMessageId);
     if (!originalMessage) return;
     message.replyToClientMessageId = originalMessage.clientMessageId;

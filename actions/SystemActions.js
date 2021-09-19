@@ -7,8 +7,10 @@ import routers from '../routers/index.js';
 import octopusGroups from '../libs/octopus/groups.js';
 import wsClients from '../libs/wsClients.js';
 import octopusMessages from '../libs/octopus/messages.js';
+import logger from '../config/logger.js';
 
 const initWS = () => {
+    logger.debug("initializing WS server");
     const httpServer = http.createServer({
         //cert: fs.readFileSync('/path/to/cert.pem'),
         //key: fs.readFileSync('/path/to/key.pem')
@@ -19,6 +21,7 @@ const initWS = () => {
 }
 
 const initWsRouting = () => {
+    logger.debug("initializing routing");
     singleton.wsServer.on("connection", (ws) => {
         ws.identity = null;
         ws.uuid = uuidv4();
@@ -28,6 +31,7 @@ const initWsRouting = () => {
             try {
                 jsonMessage = JSON.parse(message);
             } catch (e) {
+                logger.warning("message is not in a json format");
                 sendError(ws, "Can't read json message");
             }
 
@@ -43,7 +47,8 @@ const initWsRouting = () => {
 }
 
 const startWS = () => {
-    singleton.httpServer.listen(config.system.port, () => {console.log("listening to: " + config.system.port)});
+    logger.debug("starting WS server");
+    singleton.httpServer.listen(config.system.port, () => {logger.info("listening on port: " + config.system.port)});
 }
 
 const sendError = (ws, error) => {
@@ -65,6 +70,7 @@ const sendIdentity = (ws) => {
 }
 
 const initServices = () => {
+    logger.debug("initializing util services");
     setInterval(octopusMessages.clearSentMessages, 1000);
 }
 
