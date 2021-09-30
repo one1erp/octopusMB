@@ -5,6 +5,7 @@ import wsClients from '../libs/wsClients.js';
 
 import ClientRouter from './ClientRouter.js';
 import SystemRouter from './SystemRouter.js';
+import logger from '../config/logger.js';
 
 const routers = (ws, message) => {
     if (ws.identity == null) {
