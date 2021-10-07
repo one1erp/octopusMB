@@ -20,7 +20,7 @@ const addMessage = (message) => {
 }
 
 const updateStatus = (messageId, status) => {
-    logger.debug("updating message status:", messageId);
+    logger.debug("updating message status:" + messageId);
     let message = messages[messageId];
     if (message) {
         message.status = status;

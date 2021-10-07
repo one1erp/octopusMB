@@ -30,7 +30,11 @@ const sendToClient = (clientName, message) => {
 const replyToClient = (replyToMessageId, message) => {
     let originalMessage = octopusMessages.getMessage(replyToMessageId);
     if (!originalMessage) return;
-    message.replyToClientMessageId = originalMessage.clientMessageId;
+    if (message.replyTo) {
+        message.replyToClientMessageId = originalMessage.clientMessageId;
+    } else if (message.replyErrorTo) {
+        message.replyErrorToClientMessageId = originalMessage.clientMessageId;
+    }
     message.to = originalMessage.from;
     sendToClient(message.to, message);
     octopusMessages.updateStatus(originalMessage.uuid, octopusMessages.status.REPLIED);
@@ -46,7 +50,10 @@ const createMessageToClient = (message) => {
     if (message.replyToClientMessageId) {
         newMessage.replyToClientMessageId = message.replyToClientMessageId;
     }
-
+    
+    if (message.replyErrorToClientMessageId) {
+        newMessage.replyErrorToClientMessageId = message.replyErrorToClientMessageId;
+    }
     return JSON.stringify(newMessage);
 }
 

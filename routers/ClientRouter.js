@@ -8,10 +8,14 @@ const ClientRouter = (message) => {
     let name = message.to;
     let data = message.data;
     let replyTo = message.replyTo;
-    if (name || replyTo) {
+    let replyErrorTo = message.replyErrorTo;
+    if (name || replyTo || replyErrorTo) {
         if (replyTo && octopusMessages.doesMessageExists(replyTo)) {
             logger.debug("replying to messageId: " + replyTo);
             ClientActions.replyToClient(replyTo, message);
+        } else if (replyErrorTo && octopusMessages.doesMessageExists(replyErrorTo)) {
+            logger.debug("replying to messageId: " + replyErrorTo);
+            ClientActions.replyToClient(replyErrorTo, message);
         } else if (wsClients.isClientNameExists(name)) {
             logger.debug("sending to client: " + name);
             ClientActions.sendToClient(name, message);
