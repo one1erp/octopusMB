@@ -53,6 +53,7 @@ const createMessageToClient = (message) => {
     
     if (message.replyErrorToClientMessageId) {
         newMessage.replyErrorToClientMessageId = message.replyErrorToClientMessageId;
+        newMessage.message = message.message;
     }
     return JSON.stringify(newMessage);
 }
