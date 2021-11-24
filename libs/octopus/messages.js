@@ -15,7 +15,7 @@ const addMessage = (message) => {
     newMessage.uuid = uuidv4();
     newMessage.status = status.RECEIVED;
     messages[newMessage.uuid] = newMessage
-    logger.debug("added message:", newMessage);
+    logger.verbose("added message:", newMessage);
     return newMessage;
 }
 
