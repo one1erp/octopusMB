@@ -1,4 +1,4 @@
-import env from 'dotenv';
+import env from 'dotenv-defaults';
 import errors from './errors.js';
 import dotenvParseVariables from 'dotenv-parse-variables';
 
