@@ -10,7 +10,7 @@
   },
   "name": "octopusmb",
   "description": "A great message broker with WebSockets under the hood",
-  "version": "1.0.0",
+  "version": "1.1.0-rc",
   "main": "index.js",
   "type": "module",
   "devDependencies": {},
