@@ -37,7 +37,12 @@ const replyToClient = (replyToMessageId, message) => {
     }
     message.to = originalMessage.from;
     sendToClient(message.to, message);
-    octopusMessages.updateStatus(originalMessage.uuid, octopusMessages.status.REPLIED);
+    if (!message.data || (message.data && !message.data.streamType)) {
+        octopusMessages.updateStatus(originalMessage.uuid, octopusMessages.status.REPLIED);
+    } else if (message.data && message.data.streamType && message.data.streamType == "OctopusStream" && message.data.streamStatus == "END") {
+        octopusMessages.updateStatus(originalMessage.uuid, octopusMessages.status.REPLIED);
+    }
+    
 }
 
 const createMessageToClient = (message) => {
