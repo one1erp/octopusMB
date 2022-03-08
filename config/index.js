@@ -9,6 +9,7 @@ let parsedEnv = dotenvParseVariables(baseEnv.parsed);
 export default {
 	system: {
 		port: parsedEnv.PORT,
+		pingInterval: parsedEnv.PING_INTERVAL
 	},
 	errors: errors,
 	messages: {
