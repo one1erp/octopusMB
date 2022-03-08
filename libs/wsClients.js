@@ -29,11 +29,32 @@ const isClientNameExists = (name) => {
 const getClientByName = (name) => {
     return clientsNames[name];
 }
+
+/**
+ * Ping ws clients
+ * 
+ * @return void
+ */
+const pingClients = () => {
+    logger.debug("pinging ws clients")
+    for (const uuid in clients) {
+        let client = clients[uuid];
+        if (client.isAlive === false) {
+            logger.debug("ws client " + uuid + " is not alive, terminating");
+            ws.terminate();
+        } else {
+            logger.debug("pinging: " + uuid);
+            client.isAlive = false;
+            client.ping();
+        }
+    }
+}
 export default {
     addClient,
     deleteClient,
     addClientName,
     deleteClientName,
     isClientNameExists,
-    getClientByName
+    getClientByName,
+    pingClients
 }

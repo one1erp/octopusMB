@@ -25,6 +25,7 @@ const initWsRouting = () => {
     singleton.wsServer.on("connection", (ws) => {
         ws.identity = null;
         ws.uuid = uuidv4();
+        ws.isAlive = true;
         wsClients.addClient(ws)
         ws.on("message", function incoming(message) {
             let jsonMessage = null;
@@ -42,6 +43,11 @@ const initWsRouting = () => {
             wsClients.deleteClient(ws);
             wsClients.deleteClientName(ws);
             if (ws.group) octopusGroups.deleteWsFromGroup(ws);
+        });
+
+        ws.on("pong", () => {
+            logger.debug("got pong from: " + ws.uuid);
+            ws.isAlive = true;
         });
     })
 }
@@ -72,7 +78,36 @@ const sendIdentity = (ws) => {
 const initServices = () => {
     logger.debug("initializing util services");
     setInterval(octopusMessages.clearSentMessages, 1000);
+    setInterval(wsClients.pingClients, config.system.pingInterval);
 }
+
+/**
+ * System query: checks ig group or name exists
+ * @param string name 
+ * @param string replyTo 
+ * @param string replyToClientMessageId 
+ * @param string uuid 
+ * @return void
+ */
+const ResponseClientOrGroupExists = (name, replyTo, replyToClientMessageId, uuid) => {
+    logger.debug("system query is group or name exists: " + name);
+    let response = (wsClients.isClientNameExists(name) || octopusGroups.isGroupNameExists(name));
+    let responseMessage = {
+        replyToClientMessageId: replyToClientMessageId,
+        messageId: uuid,
+        data: response,
+        type: "system-response"
+    };
+    logger.debug("response to system query: " + (response? "true" : "false"));
+    sendToClient(replyTo, responseMessage, uuid);
+}
+
+const sendToClient = (clientName, message, uuid) => {
+    let client = wsClients.getClientByName(clientName);
+    if (!client) return;
+    client.send(JSON.stringify(message));
+    octopusMessages.updateStatus(uuid, octopusMessages.status.SENT);
+} 
 
 export default {
     initWS,
@@ -80,5 +115,6 @@ export default {
     startWS,
     sendError,
     sendIdentity,
-    initServices
+    initServices,
+    ResponseClientOrGroupExists
 }
