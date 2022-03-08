@@ -49,6 +49,14 @@ const pingClients = () => {
         }
     }
 }
+
+/**
+ * Get ws clients list
+ * @returns object
+ */
+const getClients = () => {
+    return clients;
+}
 export default {
     addClient,
     deleteClient,
@@ -56,5 +64,6 @@ export default {
     deleteClientName,
     isClientNameExists,
     getClientByName,
-    pingClients
+    pingClients,
+    getClients
 }
