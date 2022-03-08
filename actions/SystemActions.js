@@ -82,7 +82,7 @@ const initServices = () => {
 }
 
 /**
- * System query: checks ig group or name exists
+ * System query: checks if group or name exists
  * @param string name 
  * @param string replyTo 
  * @param string replyToClientMessageId 
@@ -102,6 +102,34 @@ const ResponseClientOrGroupExists = (name, replyTo, replyToClientMessageId, uuid
     sendToClient(replyTo, responseMessage, uuid);
 }
 
+/**
+ * System query: get list of octopus clients, including group and name
+ * @param string replyTo 
+ * @param string replyToClientMessageId 
+ * @param string uuid
+ * 
+ * @return void 
+ */
+const ResponseGetClients = (replyTo, replyToClientMessageId, uuid) => {
+    logger.debug("system query get clients");
+    let response = [];
+    let clients = wsClients.getClients();
+    for (const uuid in clients) {
+        let responseClient = {
+            group: clients[uuid].group,
+            name: clients[uuid].name
+        }
+        response.push(responseClient);
+    }
+    let responseMessage = {
+        replyToClientMessageId: replyToClientMessageId,
+        messageId: uuid,
+        data: response,
+        type: "system-response"
+    };
+    sendToClient(replyTo, responseMessage, uuid);
+}
+
 const sendToClient = (clientName, message, uuid) => {
     let client = wsClients.getClientByName(clientName);
     if (!client) return;
@@ -116,5 +144,6 @@ export default {
     sendError,
     sendIdentity,
     initServices,
-    ResponseClientOrGroupExists
+    ResponseClientOrGroupExists,
+    ResponseGetClients
 }
