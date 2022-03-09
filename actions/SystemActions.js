@@ -83,13 +83,24 @@ const initServices = () => {
 
 /**
  * System query: checks if group or name exists
- * @param string name 
+ * @param object data 
  * @param string replyTo 
  * @param string replyToClientMessageId 
  * @param string uuid 
  * @return void
  */
-const ResponseClientOrGroupExists = (name, replyTo, replyToClientMessageId, uuid) => {
+const ResponseClientOrGroupExists = (data, replyTo, replyToClientMessageId, uuid) => {
+    if (typeof data != "object" || typeof data.name != "string") {
+        let newMessage = {
+            replyErrorToClientMessageId: replyToClientMessageId,
+            message: "data object missing name property",
+            type: "system-response"
+        }
+        sendToClient(replyTo, newMessage, uuid);
+        return;
+
+    }
+    let name = data.name;
     logger.debug("system query is group or name exists: " + name);
     let response = (wsClients.isClientNameExists(name) || octopusGroups.isGroupNameExists(name));
     let responseMessage = {
