@@ -2,6 +2,7 @@ import SystemActions from '../actions/SystemActions.js';
 import octopusGroups from '../libs/octopus/groups.js';
 import octopusMessages from '../libs/octopus/messages.js';
 import wsClients from '../libs/wsClients.js';
+import config from '../config/index.js';
 
 import ClientRouter from './ClientRouter.js';
 import SystemRouter from './SystemRouter.js';
@@ -31,6 +32,19 @@ const routers = (ws, message) => {
             SystemActions.sendIdentity(ws);
 
             octopusMessages.resendWaitingMessages(ClientRouter);
+        } else {
+            //check password for system client
+            let password = message.password;
+            if (config.system.password && password != config.system.password) {
+                SystemActions.sendError(ws, "Authentication failed");
+                return;
+            }
+            //set system client identity
+            ws.identity = "system";
+            ws.name = ws.uuid;
+            wsClients.addClient(ws);
+            wsClients.addClientName(ws, ws.name);
+            SystemActions.sendIdentity(ws);
         }
     } else {
         message.from = ws.name;

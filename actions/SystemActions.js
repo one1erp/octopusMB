@@ -126,7 +126,10 @@ const ResponseGetClients = (replyTo, replyToClientMessageId, uuid) => {
     let response = [];
     let clients = wsClients.getClients();
     for (const uuid in clients) {
+        let client = clients[uuid];
+        if (client.identity != "client") continue;
         let responseClient = {
+            uuid: uuid,
             group: clients[uuid].group,
             name: clients[uuid].name
         }
