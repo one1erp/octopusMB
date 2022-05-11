@@ -41,7 +41,7 @@ const pingClients = () => {
         let client = clients[uuid];
         if (client.isAlive === false) {
             logger.debug("ws client " + uuid + " is not alive, terminating");
-            ws.terminate();
+            client.terminate();
         } else {
             logger.debug("pinging: " + uuid);
             client.isAlive = false;
