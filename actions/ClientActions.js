@@ -15,6 +15,7 @@ const sendToGroup = (group, message) => {
             currentWsIndex++;
             if (octopusGroup.wsClients.length < currentWsIndex + 1) currentWsIndex = 0;
             octopusGroup.wsClients[currentWsIndex].send(createMessageToClient(message));
+            octopusGroup.currentWsIndex = currentWsIndex;
         }
         octopusMessages.updateStatus(message.uuid, octopusMessages.status.SENT);
     }
