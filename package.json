@@ -1,20 +1,19 @@
 {
   "dependencies": {
-    "app-root-path": "^3.0.0",
-    "dotenv": "^10.0.0",
-    "dotenv-defaults": "^2.0.2",
+    "app-root-path": "^3.1.0",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "dotenv-defaults": "^5.0.2",
     "dotenv-parse-variables": "^2.0.0",
     "node-logger": "github:one1erp/node-logger",
-    "uuid": "^8.3.2",
-    "ws": "^7.4.6",
-    "dayjs": "^1.11.10"
+    "uuid": "^9.0.1",
+    "ws": "^8.15.1"
   },
   "name": "octopusmb",
   "description": "A great message broker with WebSockets under the hood",
   "version": "1.2.2-rc",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

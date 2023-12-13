@@ -1,5 +1,5 @@
 import http from 'http';
-import ws from 'ws';
+import ws , { WebSocketServer } from 'ws';
 import config from '../config/index.js';
 import singleton from '../singleton/index.js';
 import { v4 as uuidv4 }from 'uuid';
@@ -15,7 +15,7 @@ const initWS = () => {
         //cert: fs.readFileSync('/path/to/cert.pem'),
         //key: fs.readFileSync('/path/to/key.pem')
       });
-    const wss = new ws.Server({ server: httpServer });
+      const wss = new WebSocketServer({ server:httpServer });
     singleton.httpServer = httpServer;
     singleton.wsServer = wss;
 }
