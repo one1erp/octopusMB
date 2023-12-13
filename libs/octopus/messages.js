@@ -14,9 +14,10 @@ let status = {
 
 const addMessage = (message) => {
     let newMessage = {...message};
+    const timeout=message.timeout|| config.messages.requestTimeout;
+    newMessage.timeout=timeout==-1?timeout:dayjs().add(timeout,'milliseconds');
     newMessage.uuid = uuidv4();
     newMessage.status = status.RECEIVED;
-    newMessage.timeout=dayjs().add(message.timeout|| config.messages.requestTimeout,'milliseconds');
     messages[newMessage.uuid] = newMessage
     logger.silly("added message:", newMessage);
     return newMessage;
@@ -47,7 +48,7 @@ const clearSentMessages = () => {
                 logger.debug("deleting sent message:" + messageId);
                 delete messages[messageId];
             }
-            else if  (message.type=='request' && message.status !=status.REPLIED &&dayjs().isAfter(message.timeout) ){
+            else if  (message.type=='request' && message.status !=status.REPLIED &&message.timeout!=-1&& dayjs().isAfter(message.timeout) ){
                 logger.debug("deleting timeout request message:" + messageId);
                 delete messages[messageId];
             }
