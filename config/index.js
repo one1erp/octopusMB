@@ -15,6 +15,7 @@ export default {
 	messages: {
 		dataDir: parsedEnv.DATA_DIR,
 		messagesPerFile: parsedEnv.MESSAGES_PER_FILE,
+		requestTimeout:parsedEnv.REQUEST_TIMEOUT
 	},
 	log: {
         file: parsedEnv.LOG_FILE,
