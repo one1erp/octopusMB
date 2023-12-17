@@ -44,14 +44,16 @@ const clearSentMessages = () => {
     for (const messageId in messages) {
         let message = messages[messageId];
         if (message) {
+            
             if ((message.type != "request" && message.status == status.SENT) || (message.type == "request" && message.status == status.REPLIED) ) {
                 logger.debug("deleting sent message:" + messageId);
                 delete messages[messageId];
             }
-            else if  (message.type=='request' && message.status !=status.REPLIED &&message.timeout!=-1&& dayjs().isAfter(message.timeout) ){
-                logger.debug("deleting timeout request message:" + messageId);
+            else if  ((message.type=='request' || message.type=='publish')&& message.status !=status.REPLIED &&message.timeout!=-1&& dayjs().isAfter(message.timeout) ){
+                logger.debug("deleting timeout request/publish message:" + messageId);
                 delete messages[messageId];
             }
+
 
         }
     }
