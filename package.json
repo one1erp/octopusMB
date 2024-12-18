@@ -6,7 +6,7 @@
     "dotenv-defaults": "^5.0.2",
     "dotenv-parse-variables": "^2.0.0",
     "node-logger": "github:one1erp/node-logger",
-    "uuid": "^10.0.0",
+    "uuid": "^11.0.2",
     "ws": "^8.18.0"
   },
   "name": "octopusmb",
