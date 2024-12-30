@@ -1,5 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
+import dayjs from 'dayjs';
 import logger from '../../config/logger.js';
+import config from '../../config/index.js';
 
 let messages = {}
 
@@ -12,6 +14,8 @@ let status = {
 
 const addMessage = (message) => {
     let newMessage = {...message};
+    const timeout=message.timeout|| config.messages.requestTimeout;
+    newMessage.timeout=timeout==-1?timeout:dayjs().add(timeout,'milliseconds');
     newMessage.uuid = uuidv4();
     newMessage.status = status.RECEIVED;
     messages[newMessage.uuid] = newMessage
@@ -40,10 +44,16 @@ const clearSentMessages = () => {
     for (const messageId in messages) {
         let message = messages[messageId];
         if (message) {
-            if ((message.type != "request" && message.status == status.SENT) || (message.type == "request" && message.status == status.REPLIED)) {
+            
+            if ((message.type != "request" && message.status == status.SENT) || (message.type == "request" && message.status == status.REPLIED) ) {
                 logger.debug("deleting sent message:" + messageId);
                 delete messages[messageId];
             }
+            else if  ((message.type=='request' || message.type=='publish')&& message.status !=status.REPLIED &&message.timeout!=-1&& dayjs().isAfter(message.timeout) ){
+                logger.debug("deleting timeout request/publish message:" + messageId);
+                delete messages[messageId];
+            }
+
 
         }
     }
