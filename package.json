@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "app-root-path": "^3.1.0",
-    "dayjs": "^1.11.13",
-    "dotenv": "^16.4.5",
+    "dayjs": "^1.11.18",
+    "dotenv": "^17.2.2",
     "dotenv-defaults": "^5.0.2",
     "dotenv-parse-variables": "^2.0.0",
     "node-logger": "github:one1erp/node-logger",
-    "uuid": "^11.0.2",
-    "ws": "^8.18.0"
+    "uuid": "^13.0.0",
+    "ws": "^8.18.3"
   },
   "name": "octopusmb",
   "description": "A great message broker with WebSockets under the hood",
