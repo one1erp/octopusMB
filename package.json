@@ -2,7 +2,7 @@
   "dependencies": {
     "app-root-path": "^3.1.0",
     "dayjs": "^1.11.18",
-    "dotenv": "^17.2.2",
+    "dotenv": "^17.2.3",
     "dotenv-defaults": "^5.0.2",
     "dotenv-parse-variables": "^2.0.0",
     "node-logger": "github:one1erp/node-logger",
