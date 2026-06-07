@@ -19,7 +19,8 @@ jobs:
 
       - name: Set image and tag
         run: |
-          echo "IMAGE_NAME=one1erp/${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+          REPO_NAME=$(echo "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_NAME=one1erp/$REPO_NAME" >> $GITHUB_ENV
           echo "DOCKER_TAG=release-${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
       - uses: docker/build-push-action@v6
