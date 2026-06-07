@@ -46,7 +46,7 @@ const initWsRouting = () => {
         });
 
         ws.on("pong", () => {
-            logger.debug("got pong from: " + ws.uuid);
+            logger.debug(`got pong from: ${ws.group}/${ws.name}`);
             ws.isAlive = true;
         });
     })

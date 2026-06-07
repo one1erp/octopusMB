@@ -16,16 +16,16 @@ const ClientRouter = (message) => {
     }
     if (name || replyTo || replyErrorTo) {
         if (replyTo && octopusMessages.doesMessageExists(replyTo)) {
-            logger.debug("replying to messageId: " + replyTo);
             ClientActions.replyToClient(replyTo, message);
+            logger.debug(`replying to messageId: ${replyTo} (${message.from} -> ${message.to})`);
         } else if (replyErrorTo && octopusMessages.doesMessageExists(replyErrorTo)) {
-            logger.debug("replying to messageId: " + replyErrorTo);
-            ClientActions.replyToClient(replyErrorTo, message);
+           ClientActions.replyToClient(replyErrorTo, message);
+            logger.debug(`replying to messageId: ${replyErrorTo} (${message.from} -> ${message.to})`);
         } else if (wsClients.isClientNameExists(name)) {
-            logger.debug("sending to client: " + name);
+            logger.debug(`sending to client: (${message.from} -> ${name})`);
             ClientActions.sendToClient(name, message);
         } else if (octopusGroups.isGroupNameExists(name)) {
-            logger.debug("sending to group: " + name);
+            logger.debug(`sending to group: (${message.from} -> ${name})`);
             ClientActions.sendToGroup(name, message);
         } else {
             logger.debug("setting message: " + message.uuid + " to status waiting");

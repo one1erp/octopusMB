@@ -10,11 +10,13 @@ const addClient = (ws) => {
 
 
 const deleteClient = (ws) => {
-    logger.debug("removing ws:" + ws.uuid);
+    let name = ws.name ? `${ws.group}/${ws.name}` : ws.uuid;
+    logger.debug("removing ws:" + name);
     delete clients[ws.uuid];
 }
 
 const addClientName = (ws, name) => {
+    logger.debug(`naming ws:${ws.uuid} -> ${ws.group}/${ws.name}`);
     clientsNames[name] = ws;
 }
 
@@ -39,11 +41,12 @@ const pingClients = () => {
     logger.debug("pinging ws clients")
     for (const uuid in clients) {
         let client = clients[uuid];
+        let name = client.name ? `${client.group}/${client.name}` : uuid;
         if (client.isAlive === false) {
-            logger.debug("ws client " + uuid + " is not alive, terminating");
+            logger.debug("ws client " + name + " is not alive, terminating");
             client.terminate();
         } else {
-            logger.debug("pinging: " + uuid);
+            logger.debug("pinging: " + name);
             client.isAlive = false;
             client.ping();
         }

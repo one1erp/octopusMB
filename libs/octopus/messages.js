@@ -24,15 +24,17 @@ const addMessage = (message) => {
 }
 
 const updateStatus = (messageId, status) => {
-    logger.debug("updating message status:" + messageId);
     let message = messages[messageId];
+    let fromTo=message? `(${message.from} -> ${message.to})` : '';
+    logger.debug(`updating message status: ${messageId} ${fromTo} to status: ${status}`);
     if (message) {
         message.status = status;
     }
 }
 
 const doesMessageExists = (messageId) => {
-    logger.debug("checking if message exists: " + messageId);
+    let fromTo=`(${messages[messageId]?.from} -> ${messages[messageId]?.to})` || '';
+    logger.debug(`checking if message exists: ${messageId} ${fromTo}`);
     return (messages[messageId])? true : false;
 }
 
@@ -44,13 +46,13 @@ const clearSentMessages = () => {
     for (const messageId in messages) {
         let message = messages[messageId];
         if (message) {
-            
+            let fromTo=`(${message.from} -> ${message.to})`;
             if ((message.type != "request" && message.status == status.SENT) || (message.type == "request" && message.status == status.REPLIED) ) {
-                logger.debug("deleting sent message:" + messageId);
+                logger.debug(`deleting sent message: ${messageId} ${fromTo}`);
                 delete messages[messageId];
             }
             else if  ((message.type=='request' || message.type=='publish')&& message.status !=status.REPLIED &&message.timeout!=-1&& dayjs().isAfter(message.timeout) ){
-                logger.debug("deleting timeout request/publish message:" + messageId);
+                logger.debug(`deleting timeout request/publish message: ${messageId} ${fromTo}`);
                 delete messages[messageId];
             }
 
